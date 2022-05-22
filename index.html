@@ -45,11 +45,20 @@ import { getAuth ,sendEmailVerification,createUserWithEmailAndPassword,onAuthSta
 
 import { getDatabase  ,ref ,set, child, update , remove} from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
 
+const database = getDatabase();
+
 const auth = getAuth();
 // const database = database_ref(); 
 // const database = getDatabase();
 onAuthStateChanged(auth, (user) => {
   if (user) {
+
+    // firebasedatabase.ref('users/' + user.uid).set({
+    //   email: user.email,
+    //   uid: user.uid,
+    //   name: full_name
+    // });
+
     // User is signed in, see docs for a list of available properties
     console.log(user.email + " is logged in!!");
     
@@ -68,6 +77,8 @@ onAuthStateChanged(auth, (user) => {
           var password = document.getElementById('password').value;
           var name = document.getElementById('full_name').value;
 
+ 
+
 createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
@@ -82,7 +93,27 @@ createUserWithEmailAndPassword(auth, email, password)
     //   last_login : Date.now()
     // }
 
+  // function writeUserData(userId, name, email, imageUrl) {
+  // firebase.database().ref('users/' + userId).set({
+  //   username: user.name,
+  //   email: user.email,
+  //   // profile_picture : imageUrl,
+  //   // Add more stuff here
+  // });
+// }
+
+
     // database_ref.child('users/' + user.uid).set(user_data);
+//   function writeUserData(userId, name, email, password) {
+//   const db = getDatabase();
+//   set(ref(db, 'users/' + userId), {
+//     name: user.name,
+//     email: user.email,
+//     password : user.password
+    
+//   });
+//   alert('hi');
+// }
 
 sendEmailVerification(user)
   .then(() => {

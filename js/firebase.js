@@ -25,7 +25,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 // let provider = new auth.GoogleAuthProvider()
-const database = getDatabase(app);
+const database = getDatabase();
 
 
 
