@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Login + Firebase Database</title>
+         <!-- Cool Google Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap" rel="stylesheet">
+        <!-- Our stylesheet -->
+        <link rel="stylesheet" type="text/css" href="index.css">
+    </head>
+    <body>
+        <div id="content_container">
+            <div id="form_container">
+                <div id="form_header_container">
+                    <h2 id="form_header"> Login + Firebase Database </h2>
+                </div>
+
+                <div id="form_content_container">
+                    <div id="form_content_inner_container">
+                        <input type="text" id="full_name" placeholder="Full name">
+                        <input type="email" id="email" placeholder="Email">
+                        <input type="password" id="password" placeholder="New Password">
+
+                        <div id="button_container">
+                            <button id="Login" value="Log in">Login</button>
+                            <button id="Register" value="Log in"> Register</button> 
+                            <!-- <button onclick="googleSignup()">Sign Via Google</button> -->
+                            <!-- <button onclick="Googlelogin()"> Login via Google</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+ <!-- <script src="./js/firebase.js"></script> -->
+ <script src="./js/firebase.js" type="module"></script>       
+
+<script type="module">
+
+import { getAuth ,sendEmailVerification,createUserWithEmailAndPassword,onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+
+import { getDatabase  ,ref ,set, child, update , remove} from "https://www.gstatic.com/firebasejs/9.8.1/firebase-database.js";
+
+const auth = getAuth();
+// const database = database_ref(); 
+// const database = getDatabase();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    console.log(user.email + " is logged in!!");
+    
+    const uid = user.uid;
+    // ...
+  } else {
+    console.log('User is logged out!');
+    // User is signed out
+    // ...
+  }
+});
+
+        document.getElementById('Register').addEventListener('click' , (e)=> {
+
+          var email = document.getElementById('email').value;
+          var password = document.getElementById('password').value;
+          var name = document.getElementById('full_name').value;
+
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+
+    // var database_ref = database.ref();
+
+    // // Create User data
+    // var user_data = {
+    //   email : email,
+    //   full_name : full_name,
+    //   last_login : Date.now()
+    // }
+
+    // database_ref.child('users/' + user.uid).set(user_data);
+
+sendEmailVerification(user)
+  .then(() => {
+    // Email verification sent!
+    // ...
+    let msg = "An email verification link is sent to" + user.email;
+    alert(msg);
+    location.reload();
+  });
+    // ...
+  })
+  .catch((error) => {
+    // const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage);
+    // ..
+  });
+
+  });
+
+
+  document.getElementById('Login').addEventListener('click' ,(e) => {
+
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+
+
+signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    if ( !user.emailVerified){
+      alert("Please Verify your email address to login!!");
+      location.reload();
+    }
+    else if(user){
+      location.replace('Home.html');
+    }
+
+//     var database_ref = database.ref()
+
+// // Create User data
+// var user_data = {
+//   last_login : Date.now()
+// }
+
+// // Push to Firebase Database
+// database_ref.child('users/' + user.uid).update(user_data)
+
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage);
+  });
+
+  }) ;      
+
+
+  
+// const database = getDatabase();
+
+
+
+
+  // import { getDatabase, ref, set } from "firebase/database";
+
+// function writeUserData(userId, name, email, imageUrl) {
+//   const database = getDatabase();
+//   set(ref(database, 'users/' + userId), {
+//     username: name,
+//     email: email,
+//     profile_picture : imageUrl
+//   });
+// }
+
+
+
+
+//   function Googlelogin(){
+// console.log('LoginFunction Called');
+// firebase.auth().signInWithPopup(provider).then(res=>{
+//     console.log(res)
+// }).catch(e=>{
+//     console.log(e)
+// })
+//  }
+      </script>
+
+    </body>
+    
+</html>

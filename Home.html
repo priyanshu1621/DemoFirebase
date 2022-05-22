@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    
+
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #04AA6D;
+}
+</style>
+
+</head>
+<body>
+
+<ul>
+  <li><a class="active" href="#home">Home</a></li>
+  <li><a href="#news">News</a></li>
+  <li><a href="#contact">Contact</a></li>
+  <li><a href="#about">About</a></li>
+
+  <li> <button  type="submit" id="Logout" class="btn btn-link" style="margin-top: 12px; font-size: medium;">Logout</button></li> 
+
+
+</li>
+
+</ul>
+<script src="./js/firebase.js" type="module"></script>
+
+<script type="module">
+import { getAuth ,sendEmailVerification,createUserWithEmailAndPassword,onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+
+//  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+const auth = getAuth();
+auth.onAuthStateChanged(user => {
+    if (user) {
+      console.log(user.email + " is logged in!");
+    } else {
+      console.log('User is logged out!');
+      location.replace('index.html');
+    }
+  });
+  document.getElementById('Logout').addEventListener('click' ,(e) =>{
+
+    signOut(auth).then(() => {
+      location.replace('index.html');
+    }).catch((error) =>{
+      const errorCode = error.code;
+      const errorMessage = error.message;
+  
+       alert(errorMessage);
+    });
+
+  });
+
+</script>
+</body>
+</html>
